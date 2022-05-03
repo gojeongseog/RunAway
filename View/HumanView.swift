@@ -62,14 +62,33 @@ struct HumanView: View {
             
             VStack {
                 
-                Image(dayFaceImage(goalSteps: goalSteps, humanSteps: humanSteps))
-                    .resizable()
-                    .frame(width: 350, height: 350)
-                    .shadow(radius: 10)
-                    .padding(.top, 120)
-                //                Circle()
-                //                    .frame(width: 350, height: 350)
-                //                    .padding(.top, 120)
+                ZStack {
+                    Image(dayFaceImage(goalSteps: goalSteps, humanSteps: humanSteps))
+                        .resizable()
+                        .frame(width: 350, height: 350)
+                        .shadow(radius: 10)
+                        .padding(.top, 120)
+                    //                Circle()
+                    //                    .frame(width: 350, height: 350)
+                    //                    .padding(.top, 120)
+                    
+                    if dayTime {
+                        Image("blind")
+                            .resizable()
+                            .frame(width: 350, height: 350)
+                            .opacity(0)
+                            .padding(.top, 120)
+                    } else {
+                        Image("blind")
+                            .resizable()
+                            .frame(width: 350, height: 350)
+                            .opacity(0.3)
+                            .padding(.top, 120)
+                    }
+                    
+                }
+                
+                
                 
                 
                 

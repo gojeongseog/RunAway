@@ -27,12 +27,15 @@ struct ContentView: View {
                 
                 
                     .tabItem {
-                        Image(systemName: "")
+                        Text("me")
+                        Image(systemName: "face.smiling")
+                        
                     }
                 
                 MonsterView(goalSteps: $goalSteps, humanSteps: $humanSteps, monsterSteps: $monsterSteps, dayTime: $dayTime, gameOver: $gameOver)
                     .tabItem {
-                        Image(systemName: "")
+                        Text("monster")
+                        Image(systemName: "eye")
                     }
             }
             
