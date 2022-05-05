@@ -19,46 +19,73 @@ struct CreateView: View {
     
     
     @State private var selectedSteps = 2000
+    @State var startImage = "CreateBack1"
+    @State var startFaceImage = Day.mid.hImageName
+    
+    @State var rePlayImage = "RePlayBack"
+    @State var rePlayFaceImage = Day.die.hImageName
+    
     
 //    @State private var isGoalSteps = false
     
     var body: some View {
-        
+
         ZStack {
-            
-            Image("Hday")
-                .resizable()
-                .ignoresSafeArea()
             
             VStack {
                 
-                Text("DAY \(day)")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding()
                 
+                if !isGoalStep {
+                    
+                    Image(startImage)
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.top)
+
+                } else {
+                    Image(rePlayImage)
+                        .scaledToFill()
+                        .ignoresSafeArea()
+                }
+               
+                
+                Spacer()
+            }
+            
+            VStack {
+                Spacer()
+                Rectangle()
+                    .frame(width: UIScreen.main.bounds.width, height: 350)
+                    .edgesIgnoringSafeArea(.bottom)
+                    .foregroundColor(.white)
+                    .cornerRadius(30, corners: [.topLeft, .topRight])
+            }
+
+            VStack {
+                
+                if !isGoalStep {
+                    Image(startFaceImage)
+                        .resizable()
+                        .frame(width: 250, height: 250)
+                        .shadow(radius: 10)
+                        .padding(.top, 280)
+                        .padding(.bottom, 40)
+                } else {
+                    Image(rePlayFaceImage)
+                        .resizable()
+                        .frame(width: 250, height: 250)
+                        .shadow(radius: 10)
+                        .padding(.top, 280)
+                        .padding(.bottom, 40)
+                }
+
                 
                 
                 
                 if gameOver {
-                    
-                    Image(Day.low.hImageName)
-                        .resizable()
-                        .frame(width: 350, height: 350)
-                        .shadow(radius: 10)
-                    .padding(30)
-                    
                     Text("무서운 꿈을 꾸었나요? 어서 다시 도망가요!")
                         .bold()
                 } else {
-                    
-                    Image(Night.low.mImageName)
-                        .resizable()
-                        .frame(width: 350, height: 350)
-                        .shadow(radius: 10)
-                    .padding(30)
-                    
-                    Text("무서운 존재가 당신의 냄새를 맡았어요 도망가요!")
+                    Text("밤이되면 괴물이 쫗아와요! 도망가요!")
                         .bold()
                 }
                 
@@ -81,7 +108,7 @@ struct CreateView: View {
                 
                 
                 
-                Text("당신'\(selectedSteps)'걸음 걷기 입니다.")
+//                Text("당신'\(selectedSteps)'걸음 걷기 입니다.")
                 
                 Button(action: {
                     goalSteps = selectedSteps
@@ -93,8 +120,19 @@ struct CreateView: View {
                         .foregroundColor(.black)
                         .padding()
                         .background(Color.blue)
-                        .cornerRadius(30)
+                        .cornerRadius(20)
                 })
+            }
+        }.onAppear{
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+                if !isGoalStep {
+                    startImage = "CreateBack"
+                    startFaceImage = Day.low.hImageName
+                } else {
+                    rePlayImage = "CreateBack"
+                    rePlayFaceImage = Day.mid.hImageName
+                }
+                
             }
         }
         

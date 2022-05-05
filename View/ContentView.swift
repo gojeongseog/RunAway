@@ -22,6 +22,7 @@ struct ContentView: View {
         
         ZStack {
             
+            
             TabView {
                 HumanView(goalSteps: $goalSteps, humanSteps: $humanSteps, monsterSteps: $monsterSteps, dayTime: $dayTime, gameOver: $gameOver, day: $day)
                 

@@ -17,7 +17,7 @@ struct HumanView: View {
     
     func dayBackgroundImage() -> String {
         if dayTime {
-            return "Hday"
+            return "Mday"
         } else {
             return "Hnight"
         }

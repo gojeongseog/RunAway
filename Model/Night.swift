@@ -49,8 +49,8 @@ enum Night: CaseIterable {
     var mText: String {
         switch self {
         case .low : return "누군가 다가옵니다..."
-        case .mid : return "괴물이 다가옵니다 도망가!"
-        case .high : return "괴물과 가까워 졌어요 도망가!"
+        case .mid : return "괴물이 다가오고있어요!"
+        case .high : return "괴물과 가까워 졌어요!"
         case .survive : return "괴물이 지쳤네요."
         case .die : return "괴물은 배가 부릅니다."
         }
