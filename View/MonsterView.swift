@@ -13,15 +13,130 @@ struct MonsterView: View {
     @Binding var monsterSteps: Int
     @Binding var dayTime: Bool
     @Binding var gameOver: Bool
+    @Binding var day: Int
     //    @State var backGround = "Hday"
     
     func dayBackgroundImage() -> String {
         if dayTime {
-            return "Hday"
+            return "Mday"
         } else {
-            return "Night"
+            return "Mnight"
         }
     }
+    
+    
+    
+    var body: some View {
+        
+        ZStack {
+            
+            Image(dayBackgroundImage())
+                .resizable()
+                .edgesIgnoringSafeArea(.top)
+            
+            VStack {
+                VStack {
+                    
+                    if dayTime {
+                        Text("DAY \(day)")
+                            .font(.largeTitle)
+                            .bold()
+                            
+                    } else {
+                        
+                        Text("DAY \(day)")
+                            .foregroundColor(Color("Mred"))
+                            .font(.largeTitle)
+                            .bold()
+                            
+                    }
+                    
+                    Image(FaceImage())
+                        .resizable()
+                        .frame(width: 300, height: 300)
+                    //                    .shadow(radius: 10)
+                        .padding()
+                    
+                    Spacer()
+                    
+                    if dayTime {
+                        Text(mText())
+                            .font(.largeTitle)
+                            .bold()
+                    } else {
+                        Text(mText())
+                            .foregroundColor(Color("Mred"))
+                            .font(.largeTitle)
+                            .bold()
+                    }
+                    
+                }
+                
+                
+                
+                ZStack {
+                    Rectangle()
+                        .frame(width: UIScreen.main.bounds.width, height: 250)
+                        .foregroundColor(.white)
+                        .cornerRadius(20, corners: [.topLeft, .topRight])
+                    
+                    
+                    
+                    VStack {
+                        Text("MY STEPS : \(humanSteps)")
+                            .foregroundColor(Color("Hgreen"))
+                            .font(.body)
+                            .bold()
+                            .padding()
+                        
+                        if dayTime {
+                            Text("MONSTER STEPS : \(monsterSteps)")
+                                .font(.system(size: 30))
+                                .bold()
+                        } else {
+                            Text("MONSTER STEPS : \(monsterSteps)")
+                                .foregroundColor(Color("Mred"))
+                                .font(.system(size: 30))
+                                .bold()
+                            
+                        }
+                        
+                        
+                    }
+                }
+            }
+            HStack {
+                VStack {
+                    Button(action: {
+                        if monsterSteps <= goalSteps - 500 {
+                            monsterSteps += 500
+                        }
+                        
+                        if humanSteps == monsterSteps {
+                            day = 0
+                            gameOver = true
+                        }
+                    }, label: {
+                        if dayTime {
+                            Image("Mstep2")
+                                .resizable().frame(width: 40, height: 40)
+                        } else {
+                            Image("Mstep")
+                                .resizable().frame(width: 40, height: 40)
+                        }
+                    })
+                    .padding()
+                    Spacer()
+                }
+                Spacer()
+            }
+        }
+    }
+}
+
+
+
+extension MonsterView {
     
     func FaceImage() -> String {
         if dayTime {
@@ -63,63 +178,7 @@ struct MonsterView: View {
         }
     }
     
-    var body: some View {
-        ZStack {
-            
-            Image(dayBackgroundImage())
-                .resizable()
-                .ignoresSafeArea()
-            VStack {
-                if dayTime {
-                    Text("DAY 8")
-                        .font(.largeTitle)
-                        .bold()
-                        .padding()
-                } else {
-                    
-                    Text("DAY 8")
-                        .foregroundColor(Color("Mred"))
-                        .font(.largeTitle)
-                        .bold()
-                        .padding()
-                }
-                Image(FaceImage())
-                    .resizable()
-                    .frame(width: 350, height: 350)
-                    .shadow(radius: 10)
-                    .padding(30)
-                
-                Text(mText())
-                    .font(.largeTitle)
-                    .bold()
-                HStack {
-                    if dayTime {
-                        Text("\(monsterSteps) / \(humanSteps)")
-                            .font(.largeTitle)
-                            .bold()
-                    } else {
-                        Text("\(monsterSteps) / \(humanSteps)")
-                            .foregroundColor(Color("Mred"))
-                            .font(.largeTitle)
-                            .bold()
-                    }
-                    Button(action: {
-                        monsterSteps += 500
-                    }, label: {
-                        if dayTime {
-                            Image("Mstep2")
-                        } else {
-                            Image("Mstep")
-                        }
-                    })
-                }
-                .padding()
-            }
-        }
-        
-    }
 }
-
 //struct MonsterView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        MonsterView()

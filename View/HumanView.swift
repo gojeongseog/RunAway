@@ -13,65 +13,96 @@ struct HumanView: View {
     @Binding var monsterSteps: Int
     @Binding var dayTime: Bool
     @Binding var gameOver: Bool
+    @Binding var day: Int
     
     func dayBackgroundImage() -> String {
         if dayTime {
             return "Hday"
         } else {
-            return "Night"
+            return "Hnight"
         }
     }
     
     var body: some View {
         
         ZStack {
+            
             Image(dayBackgroundImage())
                 .resizable()
-                .ignoresSafeArea()
+                .edgesIgnoringSafeArea(.top)
+            
             VStack {
-                Text("DAY 8")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding()
-                ZStack {
-                    Image(FaceImage())
-                        .resizable()
-                        .frame(width: 350, height: 350)
-                        .shadow(radius: 10)
-                    .padding(30)
-                    if dayTime {
-                        Image("blind")
+                VStack {
+                    
+                    Text("DAY \(day)")
+                        .font(.largeTitle)
+                        .bold()
+                    
+                    ZStack {
+                        Image(FaceImage())
                             .resizable()
-                            .frame(width: 350, height: 350)
-                            .opacity(0)
-                        .padding(30)
-                    } else {
-                        Image("blind")
-                            .resizable()
-                            .frame(width: 350, height: 350)
-                            .opacity(0.3)
-                            .padding(30)
+                            .frame(width: 300, height: 300)
+                            .shadow(radius: 10)
+                            .padding()
+                        if dayTime {
+                            Image("blind")
+                                .resizable()
+                                .frame(width: 300, height: 300)
+                                .opacity(0)
+                                .padding()
+                        } else {
+                            Image("blind")
+                                .resizable()
+                                .frame(width: 300, height: 300)
+                                .opacity(0.3)
+                                .padding()
+                        }
                     }
-                }
+                    
+                    Spacer()
                     Text(hText())
                         .font(.largeTitle)
                         .bold()
-                    HStack {
-                        Text(String(humanSteps))
-                            .foregroundColor(Color("Hgreen"))
-                            .font(.largeTitle)
+                    
+                }
+                
+                ZStack {
+                    Rectangle()
+                        .frame(width: UIScreen.main.bounds.width, height: 250)
+                        .foregroundColor(.white)
+                        .cornerRadius(20, corners: [.topLeft, .topRight])
+
+                    
+                    VStack {
+                        Text("MY GOAL : \(goalSteps)")
+                            .font(.body)
                             .bold()
-                        Button(action: {
-                            humanSteps += 500
-                        }, label: {
-                            Image("step")
-                        })
+                            .padding()
+                        
+                        Text("MY STEPS : \(humanSteps)")
+                            .foregroundColor(Color("Hgreen"))
+                            .font(.system(size: 40))
+                            .bold()
                     }
+                }
+            }
+            HStack {
+                VStack {
+                    Button(action: {
+                        humanSteps += 500
+                    }, label: {
+                            Image("step")
+                                .resizable().frame(width: 40, height: 40)
+                    })
                     .padding()
+                    Spacer()
+                }
+                Spacer()
             }
         }
     }
 }
+
 
 
 extension HumanView {
@@ -127,5 +158,25 @@ extension HumanView {
                 return Night.mid.hText
             }
         }
+    }
+}
+
+
+
+
+struct RoundedCorner: Shape {
+    
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+    
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}
+
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape( RoundedCorner(radius: radius, corners: corners) )
     }
 }

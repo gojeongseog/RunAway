@@ -9,17 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     
-    init() {
-            UITabBar.appearance().barTintColor = UIColor.blue
-            UITabBar.appearance().tintColor = .green
-        }
-    
-    @State var goalSteps = 5000
-    
+    @State var goalSteps = 2000
+    @State var day = 0
     @State var humanSteps = 0
     @State var monsterSteps = 0
-//    @Binding var star: Date
-//    @Binding var today: Date
     @State var dayTime = true
     @State var gameOver = false
     @State var isGoalStep = false
@@ -30,26 +23,24 @@ struct ContentView: View {
         ZStack {
             
             TabView {
-                HumanView(goalSteps: $goalSteps, humanSteps: $humanSteps, monsterSteps: $monsterSteps, dayTime: $dayTime, gameOver: $gameOver)
+                HumanView(goalSteps: $goalSteps, humanSteps: $humanSteps, monsterSteps: $monsterSteps, dayTime: $dayTime, gameOver: $gameOver, day: $day)
                 
                 
                     .tabItem {
-                        Text("me")
+                        Text("ME")
                         Image(systemName: "face.smiling")
                         
                     }
                 
-                MonsterView(goalSteps: $goalSteps, humanSteps: $humanSteps, monsterSteps: $monsterSteps, dayTime: $dayTime, gameOver: $gameOver)
+                MonsterView(goalSteps: $goalSteps, humanSteps: $humanSteps, monsterSteps: $monsterSteps, dayTime: $dayTime, gameOver: $gameOver, day: $day)
                     .tabItem {
-                        Text("monster")
+                        Text("MONSTER")
                         Image(systemName: "eye")
                     }
             }
-            .font(.headline)
-            .accentColor(.white)
-                
+//            .accentColor(tabItemColor())
             
-            
+
             HStack {
                 Spacer()
                 VStack {
@@ -60,15 +51,19 @@ struct ContentView: View {
                         if dayTime {
                             monsterSteps = 0
                             humanSteps = 0
+                            if !gameOver {
+                                day += 1
+                            }
+                            
                         }
                         
                     }, label: {
                         
                         if dayTime {
-                           // monsterSteps = 0
+                            // monsterSteps = 0
                             Image("sun")
                                 .resizable().frame(width: 50, height: 50)
-
+                            
                                 .padding()
                         } else {
                             Image("moon")
@@ -81,17 +76,28 @@ struct ContentView: View {
                     Spacer()
                 }
             }
-            
-            if gameOver || !isGoalStep {
-                CreateView(goalSteps: $goalSteps, gameOver: $gameOver, isGoalStep: $isGoalStep)
+            if dayTime {
+                if gameOver || !isGoalStep {
+                    CreateView(goalSteps: $goalSteps, gameOver: $gameOver, isGoalStep: $isGoalStep, day: $day)
+                }
             }
+            
+            
         }
         
     }
 }
 
 
-
+extension ContentView {
+    func tabItemColor() -> Color {
+        if dayTime {
+            return Color.black
+        } else {
+            return Color.white
+        }
+    }
+}
 
 
 
