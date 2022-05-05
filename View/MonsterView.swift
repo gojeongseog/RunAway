@@ -13,9 +13,7 @@ struct MonsterView: View {
     @Binding var monsterSteps: Int
     @Binding var dayTime: Bool
     @Binding var gameOver: Bool
-//    @State var backGround = "Hday"
-    
-
+    //    @State var backGround = "Hday"
     
     func dayBackgroundImage() -> String {
         if dayTime {
@@ -25,107 +23,101 @@ struct MonsterView: View {
         }
     }
     
-    func dayFaceImage(goalSteps: Int, humanSteps: Int) -> String {
-        
+    func FaceImage() -> String {
         if dayTime {
             return "Msleep"
         } else {
-            
-            return Night.survive.mImageName
-            
-//            if humanSteps - monsterSteps <= 0 {
-//                return Night.die.mImageName
-//            } else if humanSteps - monsterSteps < goalSteps / 3 {
-//                return Night.high.mImageName
-//            } else if humanSteps - monsterSteps < goalSteps / 2 {
-//                return Night.mid.mImageName
-//            } else {
-//                return Night.low.mImageName
-//            }
+            if humanSteps <= monsterSteps {
+                return Night.die.mImageName
+            } else if monsterSteps < goalSteps / 10 {
+                return Night.low.mImageName
+            } else if monsterSteps < goalSteps / 2 {
+                return Night.mid.mImageName
+            } else if monsterSteps < goalSteps {
+                return Night.high.mImageName
+            } else if monsterSteps == goalSteps && monsterSteps < humanSteps {
+                return Night.survive.mImageName
+            } else {
+                return Night.mid.mImageName
+            }
+        }
+    }
+    
+    func mText() -> String {
+        if dayTime {
+            return "ZZzzz"
+        } else {
+            if humanSteps <= monsterSteps {
+                return Night.die.mText
+            } else if monsterSteps < goalSteps / 10 {
+                return Night.low.mText
+            } else if monsterSteps < goalSteps / 2 {
+                return Night.mid.mText
+            } else if monsterSteps < goalSteps {
+                return Night.high.mText
+            } else if monsterSteps == goalSteps && monsterSteps < humanSteps {
+                return Night.survive.mText
+            } else {
+                return Night.mid.mText
+            }
         }
     }
     
     var body: some View {
         ZStack {
             
-                Image(dayBackgroundImage())
-                    .resizable()
-                    .ignoresSafeArea()
-            
-            
-            
-            
-            
+            Image(dayBackgroundImage())
+                .resizable()
+                .ignoresSafeArea()
             VStack {
-                
-                Image(dayFaceImage(goalSteps: goalSteps, humanSteps: humanSteps))
+                if dayTime {
+                    Text("DAY 8")
+                        .font(.largeTitle)
+                        .bold()
+                        .padding()
+                } else {
+                    
+                    Text("DAY 8")
+                        .foregroundColor(Color("Mred"))
+                        .font(.largeTitle)
+                        .bold()
+                        .padding()
+                }
+                Image(FaceImage())
                     .resizable()
                     .frame(width: 350, height: 350)
                     .shadow(radius: 10)
-                    .padding(.top, 120)
-                //                Circle()
-                //                    .frame(width: 350, height: 350)
-                //                    .padding(.top, 120)
+                    .padding(30)
                 
-                
-                
-                VStack {
-                    
+                Text(mText())
+                    .font(.largeTitle)
+                    .bold()
+                HStack {
                     if dayTime {
-                        
-                        Text("DAY 8")
+                        Text("\(monsterSteps) / \(humanSteps)")
                             .font(.largeTitle)
                             .bold()
-                            .padding()
-                        
                     } else {
-                        
-                        Text("DAY 8")
+                        Text("\(monsterSteps) / \(humanSteps)")
                             .foregroundColor(Color("Mred"))
                             .font(.largeTitle)
                             .bold()
-                            .padding()
-                        
                     }
-                        
-                    
-                    
-                    HStack {
-                        
+                    Button(action: {
+                        monsterSteps += 500
+                    }, label: {
                         if dayTime {
-                            Text("\(monsterSteps) / \(humanSteps)")
-                                .font(.largeTitle)
-                                .bold()
+                            Image("Mstep2")
                         } else {
-                            Text("\(monsterSteps) / \(humanSteps)")
-                                .foregroundColor(Color("Mred"))
-                                .font(.largeTitle)
-                                .bold()
+                            Image("Mstep")
                         }
-                        
-                        
-                        Button(action: {
-                            monsterSteps += 500
-                        }, label: {
-                            if !dayTime {
-                                Image("Mstep")
-                            }
-                            
-                        })
-                        
-                    }
-                    .padding()
-                    
+                    })
                 }
-                .frame(width: 350, height: 350)
-                
+                .padding()
             }
-            
-            
         }
         
     }
-    
 }
 
 //struct MonsterView_Previews: PreviewProvider {

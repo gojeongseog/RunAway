@@ -13,9 +13,6 @@ struct HumanView: View {
     @Binding var monsterSteps: Int
     @Binding var dayTime: Bool
     @Binding var gameOver: Bool
-//    @State var backGround = "Hday"
-    
-
     
     func dayBackgroundImage() -> String {
         if dayTime {
@@ -25,8 +22,61 @@ struct HumanView: View {
         }
     }
     
-    func dayFaceImage(goalSteps: Int, humanSteps: Int) -> String {
+    var body: some View {
         
+        ZStack {
+            Image(dayBackgroundImage())
+                .resizable()
+                .ignoresSafeArea()
+            VStack {
+                Text("DAY 8")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding()
+                ZStack {
+                    Image(FaceImage())
+                        .resizable()
+                        .frame(width: 350, height: 350)
+                        .shadow(radius: 10)
+                    .padding(30)
+                    if dayTime {
+                        Image("blind")
+                            .resizable()
+                            .frame(width: 350, height: 350)
+                            .opacity(0)
+                        .padding(30)
+                    } else {
+                        Image("blind")
+                            .resizable()
+                            .frame(width: 350, height: 350)
+                            .opacity(0.3)
+                            .padding(30)
+                    }
+                }
+                    Text(hText())
+                        .font(.largeTitle)
+                        .bold()
+                    HStack {
+                        Text(String(humanSteps))
+                            .foregroundColor(Color("Hgreen"))
+                            .font(.largeTitle)
+                            .bold()
+                        Button(action: {
+                            humanSteps += 500
+                        }, label: {
+                            Image("step")
+                        })
+                    }
+                    .padding()
+            }
+        }
+    }
+}
+
+
+extension HumanView {
+    
+    func FaceImage() -> String {
         if dayTime {
             if humanSteps >= goalSteps {
                 return Day.high.hImageName
@@ -37,96 +87,45 @@ struct HumanView: View {
             }
         } else {
             
-            if humanSteps - monsterSteps <= 0 {
+            if humanSteps <= monsterSteps {
                 return Night.die.hImageName
-            } else if humanSteps - monsterSteps < goalSteps / 3 {
-                return Night.high.hImageName
-            } else if humanSteps - monsterSteps < goalSteps / 2 {
+            } else if monsterSteps < goalSteps / 10 {
+                return Night.low.hImageName
+            } else if monsterSteps < goalSteps / 2 {
                 return Night.mid.hImageName
+            } else if monsterSteps < goalSteps {
+                return Night.high.hImageName
+            } else if monsterSteps == goalSteps && monsterSteps < humanSteps {
+                return Night.survive.hImageName
             } else {
-                return Day.low.hImageName
+                return Night.mid.hImageName
             }
         }
     }
     
-    var body: some View {
-        ZStack {
-            
-                Image(dayBackgroundImage())
-                    .resizable()
-                    .ignoresSafeArea()
-            
-            
-            
-            
-            
-            VStack {
-                
-                ZStack {
-                    Image(dayFaceImage(goalSteps: goalSteps, humanSteps: humanSteps))
-                        .resizable()
-                        .frame(width: 350, height: 350)
-                        .shadow(radius: 10)
-                        .padding(.top, 120)
-                    //                Circle()
-                    //                    .frame(width: 350, height: 350)
-                    //                    .padding(.top, 120)
-                    
-                    if dayTime {
-                        Image("blind")
-                            .resizable()
-                            .frame(width: 350, height: 350)
-                            .opacity(0)
-                            .padding(.top, 120)
-                    } else {
-                        Image("blind")
-                            .resizable()
-                            .frame(width: 350, height: 350)
-                            .opacity(0.3)
-                            .padding(.top, 120)
-                    }
-                    
-                }
-                
-                
-                
-                
-                
-                VStack {
-                    Text("DAY 8")
-                        .font(.largeTitle)
-                        .bold()
-                        .padding()
-                    
-                    
-                    HStack {
-                        Text(String(humanSteps))
-                            .font(.largeTitle)
-                            .bold()
-                        
-                        Button(action: {
-                            humanSteps += 500
-                        }, label: {
-                            Image("step")
-                        })
-                        
-                    }
-                    .padding()
-                    
-                }
-                .frame(width: 350, height: 350)
-                
+    func hText() -> String {
+        if dayTime {
+            if humanSteps >= goalSteps {
+                return Day.high.hText
+            } else if humanSteps >= goalSteps / 2 {
+                return Day.mid.hText
+            } else {
+                return Day.low.hText
             }
-            
-            
+        } else {
+            if humanSteps <= monsterSteps {
+                return Night.die.hText
+            } else if monsterSteps < goalSteps / 10 {
+                return Night.low.hText
+            } else if monsterSteps < goalSteps / 2 {
+                return Night.mid.hText
+            } else if monsterSteps < goalSteps {
+                return Night.high.hText
+            } else if monsterSteps == goalSteps && monsterSteps < humanSteps {
+                return Night.survive.hText
+            } else {
+                return Night.mid.hText
+            }
         }
-        
     }
-    
 }
-
-//struct HumanView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HumanView()
-//    }
-//}
